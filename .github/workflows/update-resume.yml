@@ -25,20 +25,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y poppler-utils
 
-      - name: Generate Dynamic Preview & Update README
+      - name: Generate Preview in Workflows Folder & Update README
         run: |
-          # 1. Remove old preview images
-          rm -f resume-preview-*.png Subhabrata_Sahoo_Resume_Preview*.png
+          # 1. Clean up any existing preview images in root and .github/workflows
+          rm -f resume-preview-*.png Subhabrata_Sahoo_Resume_Preview*.png .github/workflows/resume-preview-*.png
 
-          # 2. Generate new preview name using short commit SHA
-          IMAGE_NAME="resume-preview-${GITHUB_SHA::7}"
+          # 2. Define image path inside .github/workflows/
+          IMAGE_PATH=".github/workflows/resume-preview-${GITHUB_SHA::7}"
 
-          # 3. Convert PDF to PNG
-          pdftoppm -png -f 1 -singlefile Subhabrata_Sahoo_Resume.pdf "$IMAGE_NAME"
+          # 3. Convert PDF to PNG inside .github/workflows/
+          pdftoppm -png -f 1 -singlefile Subhabrata_Sahoo_Resume.pdf "$IMAGE_PATH"
 
-          # 4. Rebuild README.md pointing to the new dynamic filename
+          # 4. Rebuild README.md pointing to the nested image path
           cat > README.md <<EOF
-          [![Resume Preview](./${IMAGE_NAME}.png)](./Subhabrata_Sahoo_Resume.pdf)
+          [![Resume Preview](./${IMAGE_PATH}.png)](./Subhabrata_Sahoo_Resume.pdf)
 
           **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
           EOF
