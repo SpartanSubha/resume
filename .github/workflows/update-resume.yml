@@ -32,8 +32,7 @@ jobs:
       - name: Update README
         run: |
           cat > README.md <<EOF
-
-          [![Resume Preview](./Subhabrata_Sahoo_Resume_Preview.png?v=${{ github.run_id }}](./Subhabrata_Sahoo_Resume.pdf)
+          [![Resume Preview](./Subhabrata_Sahoo_Resume_Preview.png?v=${{ github.run_id }})](./Subhabrata_Sahoo_Resume.pdf)
 
           **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
           EOF
