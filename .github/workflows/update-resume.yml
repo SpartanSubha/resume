@@ -27,7 +27,7 @@ jobs:
 
       - name: Generate Preview in Hidden Assets Folder & Update README
         run: |
-          # 1. Create hidden assets directory
+          # 1. Ensure hidden assets directory exists
           mkdir -p .github/assets
 
           # 2. Clean up old preview images across root and .github
@@ -39,7 +39,7 @@ jobs:
           # 4. Convert PDF to PNG inside .github/assets/
           pdftoppm -png -f 1 -singlefile Subhabrata_Sahoo_Resume.pdf "$IMAGE_PATH"
 
-          # 5. Rebuild README.md pointing to the assets path
+          # 5. Rebuild README.md pointing to the nested assets path
           cat > README.md <<EOF
           [![Resume Preview](./${IMAGE_PATH}.png)](./Subhabrata_Sahoo_Resume.pdf)
 
@@ -57,5 +57,6 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Update resume preview [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
