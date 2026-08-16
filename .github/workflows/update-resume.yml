@@ -25,16 +25,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y poppler-utils
 
-      - name: Create resume preview
+      - name: Generate Dynamic Preview & Update README
         run: |
-          pdftoppm -png -f 1 -singlefile \
-            Subhabrata_Sahoo_Resume.pdf \
-            Subhabrata_Sahoo_Resume_Preview
+          # 1. Remove old preview images
+          rm -f resume-preview-*.png Subhabrata_Sahoo_Resume_Preview*.png
 
-      - name: Update README
-        run: |
+          # 2. Generate new preview name using short commit SHA
+          IMAGE_NAME="resume-preview-${GITHUB_SHA::7}"
+
+          # 3. Convert PDF to PNG
+          pdftoppm -png -f 1 -singlefile Subhabrata_Sahoo_Resume.pdf "$IMAGE_NAME"
+
+          # 4. Rebuild README.md pointing to the new dynamic filename
           cat > README.md <<EOF
-          [![Resume Preview](https://raw.githubusercontent.com/SpartanSubha/resume/main/Subhabrata_Sahoo_Resume_Preview.png?v=${{ github.run_id }})](./Subhabrata_Sahoo_Resume.pdf)
+          [![Resume Preview](./${IMAGE_NAME}.png)](./Subhabrata_Sahoo_Resume.pdf)
 
           **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
           EOF
@@ -44,11 +48,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add Subhabrata_Sahoo_Resume_Preview.png README.md
+          git add -A
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update resume preview"
+            git commit -m "Update resume preview [skip ci]"
             git push
           fi
