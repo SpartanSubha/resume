@@ -7,6 +7,8 @@ on:
     paths:
       - 'Subhabrata_Sahoo_Resume.pdf'
 
+  workflow_dispatch:
+
 permissions:
   contents: write
 
