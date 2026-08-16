@@ -41,11 +41,11 @@ jobs:
 
           # 5. Rebuild README.md pointing to the nested assets path
           cat > README.md <<EOF
-          **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
+          **[Download Resume PDF](https://github.com/SpartanSubha/resume/raw/main/Subhabrata_Sahoo_Resume.pdf)**
           
           [![Resume Preview](./${IMAGE_PATH}.png)](./Subhabrata_Sahoo_Resume.pdf)
 
-          **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
+          **[Download Resume PDF](https://github.com/SpartanSubha/resume/raw/main/Subhabrata_Sahoo_Resume.pdf)**
           EOF
 
       - name: Commit updated preview
