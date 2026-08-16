@@ -1,3 +1,3 @@
-[![Resume Preview](./resume-preview-a96d72b.png)](./Subhabrata_Sahoo_Resume.pdf)
+[![Resume Preview](./.github/assets/resume-preview-c9cf64d.png)](./Subhabrata_Sahoo_Resume.pdf)
 
 **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
