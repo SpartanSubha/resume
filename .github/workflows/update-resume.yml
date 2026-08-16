@@ -7,6 +7,8 @@ on:
     paths:
       - 'Subhabrata_Sahoo_Resume.pdf'
 
+  workflow_dispatch:
+
 permissions:
   contents: write
 
@@ -32,7 +34,7 @@ jobs:
       - name: Update README
         run: |
           cat > README.md <<EOF
-          [![Resume Preview](./Subhabrata_Sahoo_Resume_Preview.png?v=${{ github.run_id }})](./Subhabrata_Sahoo_Resume.pdf)
+          [![Resume Preview](https://raw.githubusercontent.com/SpartanSubha/resume/main/Subhabrata_Sahoo_Resume_Preview.png?v=${{ github.run_id }})](./Subhabrata_Sahoo_Resume.pdf)
 
           **[Download Resume PDF](./Subhabrata_Sahoo_Resume.pdf)**
           EOF
