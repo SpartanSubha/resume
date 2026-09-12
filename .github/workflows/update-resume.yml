@@ -25,27 +25,41 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y poppler-utils
 
-      - name: Generate Preview in Hidden Assets Folder & Update README
+      - name: Generate Multi-page Previews & Update README
         run: |
-          # 1. Ensure hidden assets directory exists
+          # 1. Ensure asset folder exists
           mkdir -p .github/assets
 
-          # 2. Clean up old preview images across root and .github
+          # 2. Clean up old preview images across the repo
           rm -f resume-preview-*.png Subhabrata_Sahoo_Resume_Preview*.png .github/assets/resume-preview-*.png
 
-          # 3. Define image path inside .github/assets/
-          IMAGE_PATH=".github/assets/resume-preview-${GITHUB_SHA::7}"
+          # 3. Base prefix using short commit SHA
+          SHA_PREFIX="resume-preview-${GITHUB_SHA::7}"
 
-          # 4. Convert PDF to PNG inside .github/assets/
-          pdftoppm -png -f 1 -singlefile Subhabrata_Sahoo_Resume.pdf "$IMAGE_PATH"
+          # 4. Convert all pages of the PDF to PNGs (generates ${SHA_PREFIX}-1.png, ${SHA_PREFIX}-2.png, etc.)
+          pdftoppm -png Subhabrata_Sahoo_Resume.pdf ".github/assets/${SHA_PREFIX}"
 
-          # 5. Rebuild README.md pointing to the nested assets path
+          # 5. Start building clean README
           cat > README.md <<EOF
-          **[Download Resume PDF](https://github.com/SpartanSubha/resume/raw/main/Subhabrata_Sahoo_Resume.pdf)**
-          
-          [![Resume Preview](./${IMAGE_PATH}.png)](./Subhabrata_Sahoo_Resume.pdf)
+          <p align="center">
+            <a href="./Subhabrata_Sahoo_Resume.pdf"><b>Download Resume PDF</b></a>
+          </p>
+          EOF
 
-          **[Download Resume PDF](https://github.com/SpartanSubha/resume/raw/main/Subhabrata_Sahoo_Resume.pdf)**
+          # 6. Append each generated page in order
+          for img in $(ls .github/assets/${SHA_PREFIX}-*.png | sort -V); do
+            cat >> README.md <<EOF
+
+          [![Resume Page](./${img})](./Subhabrata_Sahoo_Resume.pdf)
+          EOF
+          done
+
+          # 7. Add footer download link
+          cat >> README.md <<EOF
+
+          <p align="center">
+            <a href="./Subhabrata_Sahoo_Resume.pdf"><b>Download Resume PDF</b></a>
+          </p>
           EOF
 
       - name: Commit updated preview
@@ -58,7 +72,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update resume preview [skip ci]"
+            git commit -m "Update multi-page resume preview [skip ci]"
             git pull --rebase origin main
             git push origin main
           fi
